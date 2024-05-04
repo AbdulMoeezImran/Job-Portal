@@ -1,0 +1,21 @@
+{
+  "name": "job-portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "i-client": "npm install --prefix client",
+    "i-server": "npm install --prefix server",
+    "i-app": "npm run install-server && npm run install-client",
+    "client": "npm run dev --prefix client",
+    "server": "npm start --prefix server",
+    "watch": "concurrently \"npm run server\" \"npm run client\"",
+    "app": "npm run dev --prefix client && npm start --prefix server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
