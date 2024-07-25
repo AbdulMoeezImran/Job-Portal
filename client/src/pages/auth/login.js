@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { postRequest } from "@/GlobalFunctions/ApiRequest";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "@/Redux/slice";
 
 export default function Login({ getUser }) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleSubmit = async e => {
@@ -17,7 +20,7 @@ export default function Login({ getUser }) {
 
       localStorage.setItem("authToken", data);
       Router.push("/");
-      getUser();
+      dispatch(fetchUser());
     } catch (error) {
       console.error(error);
     }

@@ -14,21 +14,21 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    userData: null,
-    isUserPending: false,
+    userInfo: null,
+    userPending: true,
   },
   reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchUser.pending, state => {
-        state.isUserPending = true;
+        state.userPending = true;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        state.userData = action.payload;
-        state.isUserPending = false;
+        state.userInfo = action.payload;
+        state.userPending = false;
       })
       .addCase(fetchUser.rejected, state => {
-        state.isUserPending = false;
+        state.userPending = false;
       });
   },
 });
@@ -39,16 +39,12 @@ export const userReducer = userSlice.reducer;
 export const jobSlice = createSlice({
   name: "Job",
   initialState: {
-    JobData: null,
-    matchingData: null,
+    JobData: [],
     myJobs: null,
   },
   reducers: {
     setJobData: (state, action) => {
       state.JobData = action.payload;
-    },
-    setMatchingJobDat: (state, action) => {
-      state.matchingData = action.payload;
     },
     setMyJobs: (state, action) => {
       state.myJobs = action.payload;
@@ -56,7 +52,7 @@ export const jobSlice = createSlice({
   },
 });
 
-export const { setJobData, setMatchingJobDat, setMyJobs } = jobSlice.actions;
+export const { setJobData, setMyJobs } = jobSlice.actions;
 
 export const jobReducer = jobSlice.reducer;
 

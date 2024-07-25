@@ -1,13 +1,13 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
-import { appliedJobReducer, fetchUser, jobReducer, userReducer } from "./slice";
+import { appliedJobReducer, jobReducer, userReducer } from "./slice";
 
 const logger = createLogger();
 
 const rootReducer = combineReducers({
-  userReducer,
-  jobReducer,
-  appliedJobReducer,
+  user: userReducer,
+  jobs: jobReducer,
+  appliedJobs: appliedJobReducer,
 });
 
 export const store = configureStore({
@@ -17,5 +17,3 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat([logger]),
 });
-
-store.dispatch(fetchUser());

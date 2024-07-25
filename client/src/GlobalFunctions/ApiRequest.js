@@ -1,6 +1,5 @@
+import axios from "axios";
 import { errorToast } from "./toasts";
-
-const { default: axios } = require("axios");
 
 export const getRequest = async url => {
   try {

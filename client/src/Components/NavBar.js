@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BiLogOut } from "react-icons/bi";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
-export default function NavBar({ userInfo }) {
+export default function NavBar() {
   const Router = useRouter();
+  const userInfo = useSelector(state => state.user.userInfo);
   const [openJobs, setOpenJobs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,7 +19,7 @@ export default function NavBar({ userInfo }) {
 
   return (
     <>
-      <div className="w-full px-6 h-20 bg-indigo-600 text-white flex items-center justify-between sticky top-0 left-0 z-[1000]">
+      <div className="w-full px-6 h-20 bg-indigo-600 text-white flex items-center justify-between fixed top-0 left-0 z-[1000]">
         <div className="px-2 h-full flex items-center justify-center">
           <p className="uppercase font-semibold tracking-widest text-lg">
             JOB-PORTAL
@@ -32,19 +34,19 @@ export default function NavBar({ userInfo }) {
             Home
           </Link>
           <Link
-            href={"/frontend/postAJob"}
+            href={userInfo ? "/postajob" : "/auth/login"}
             className="px-3 mx-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
           >
             Post Jobs
           </Link>
           <Link
-            href={"/frontend/postedJob"}
+            href={userInfo ? "/postedjobs" : "/auth/login"}
             className="px-3 mx-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
           >
             Posted Jobs
           </Link>
           <Link
-            href={"/frontend/dashboard"}
+            href={userInfo ? "/dashboard" : "/auth/login"}
             className="px-3 mx-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
           >
             Dashboard
@@ -86,7 +88,7 @@ export default function NavBar({ userInfo }) {
         </div>
 
         {isOpen && (
-          <div className="flex absolute w-full lg:hidden py-2 animate-fade-in-down  bg-indigo-600 transition-all fade duration-1000 top-20 left-0 items-center justify-center flex-col ">
+          <div className="flex absolute w-full lg:hidden py-2 bg-indigo-600 transition-all fade duration-1000 top-20 left-0 items-center justify-center flex-col ">
             <div className="px-2 h-full flex items-center justify-center flex-col py-2 ">
               <Link
                 href={"/"}
@@ -95,62 +97,37 @@ export default function NavBar({ userInfo }) {
               >
                 Home
               </Link>
-              <button
-                onClick={() => setOpenJobs(state => !state)}
-                className="px-3  m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase flex items-center justify-center"
-              >
-                Jobs {openJobs ? <AiFillCaretUp /> : <AiFillCaretDown />}{" "}
-              </button>
-
-              {openJobs && (
-                <>
-                  <Link
-                    href={"/frontend/displayJobs"}
-                    onClick={() => setIsOpen(false)}
-                    className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
-                  >
-                    View Jobs
-                  </Link>
-                  <Link
-                    href={"/frontend/postAJob"}
-                    onClick={() => setIsOpen(false)}
-                    className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
-                  >
-                    Post Jobs
-                  </Link>
-                  <Link
-                    href={"/frontend/postedJob"}
-                    onClick={() => setIsOpen(false)}
-                    className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
-                  >
-                    Posted Jobs
-                  </Link>
-                </>
-              )}
               <Link
-                href={"/frontend/dashboard"}
+                href={userInfo ? "/postajob" : "/auth/login"}
+                onClick={() => setIsOpen(false)}
+                className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
+              >
+                Post Jobs
+              </Link>
+              <Link
+                href={userInfo ? "/postedjobs" : "/auth/login"}
+                onClick={() => setIsOpen(false)}
+                className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
+              >
+                Posted Jobs
+              </Link>
+              <Link
+                href={userInfo ? "/dashboard" : "/auth/login"}
                 onClick={() => setIsOpen(false)}
                 className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
               >
                 Dashboard
               </Link>
-              <Link
-                href={"/"}
-                onClick={() => setIsOpen(false)}
-                className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
-              >
-                Contact
-              </Link>
             </div>
 
             <div className="px-2 h-full  items-center justify-center flex">
-              {user !== null ? (
+              {userInfo !== null ? (
                 <>
                   <BiLogOut
                     onClick={handleLogout}
                     className=" cursor-pointer text-3xl hover:text-red-500 transition-all duration-700"
                   />
-                  <p className="text-lg px-4 font-semibold">{user?.name}</p>
+                  <p className="text-lg px-4 font-semibold">{userInfo.name}</p>
                 </>
               ) : (
                 <>
@@ -174,7 +151,7 @@ export default function NavBar({ userInfo }) {
       </div>
       {isOpen && (
         <div
-          className="absolute inset-0 z-[900] bg-slate-400"
+          className="absolute inset-0 z-[900]"
           onClick={() => setIsOpen(false)}
         />
       )}

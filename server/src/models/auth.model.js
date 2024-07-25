@@ -2,6 +2,11 @@ import authDatabase from "./auth.mongo.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = async ({ name, email, password }) => {
+  const findUser = await authDatabase.findOne({ email });
+  if (findUser) {
+    throw new Error("Email already registered");
+  }
+
   return await authDatabase.create({ name, email, password });
 };
 
@@ -16,7 +21,7 @@ export const loginUser = async ({ email, password }) => {
   }
 
   const accessToken = jwt.sign(
-    { email: findUser.email },
+    { name: findUser.name, email: findUser.email },
     process.env.ACCESS_TOKEN_SECRET
   );
 
@@ -42,5 +47,5 @@ export const forgetPassword = async ({ email, password }) => {
 export const userInfo = async ({ email }) => {
   const findUser = await authDatabase.findOne({ email });
 
-  return { email: findUser.email, name: findUser.name };
+  return { id: findUser._id, email: findUser.email, name: findUser.name };
 };
