@@ -3,6 +3,7 @@ import {
   loginUser,
   forgetPassword,
   userInfo,
+  resetPassword,
 } from "../../models/auth.model.js";
 
 export const httpRegisterUser = async (req, res) => {
@@ -30,6 +31,17 @@ export const httpForgetPassword = async (req, res) => {
   const data = req.body;
   try {
     const result = await forgetPassword(data);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const httpResetPassword = async (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  try {
+    const result = await resetPassword(id, data);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });

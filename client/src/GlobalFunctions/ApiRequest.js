@@ -33,6 +33,8 @@ export const postRequest = async (url, data, type) => {
 };
 
 export const putRequest = async (url, data, type) => {
+  console.log("http://localhost:4000/api" + url);
+
   try {
     const response = await axios.put("http://localhost:4000/api" + url, data, {
       headers: {

@@ -13,6 +13,8 @@ mongoose.connection.once("open", () => {
 
 mongoose.connection.on("error", err => {
   console.error("err");
+
+  startServer();
 });
 
 const server = http.createServer(app);

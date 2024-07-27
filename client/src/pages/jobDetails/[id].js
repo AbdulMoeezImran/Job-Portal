@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import Loader from "@/Components/Loader";
 
 export default function JobDetails() {
-  const router = useRouter();
   const userInfo = useSelector(state => state.user.userInfo);
+  const router = useRouter();
   const { id } = router.query;
   const [JobDetails, setJobDetails] = useState(null);
 
