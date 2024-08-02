@@ -1,11 +1,9 @@
 import React from "react";
 import { BsDot } from "react-icons/bs";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import Router from "next/router";
 
-const JobsCard = ({ job }) => {
-  const router = useRouter();
+const JobsCard = ({ job, posted }) => {
   return (
     <div className="w-full cursor-pointer  transition-all duration-1000  md:w-5/12 m-4 border hover:shadow-xl rounded px-4 md:flex md:flex-wrap">
       <div className="mb-4 flex  items-center justify-center py-2">
@@ -48,7 +46,13 @@ const JobsCard = ({ job }) => {
           </div>
         </div>
         <button
-          onClick={() => router.push(`/jobDetails/${job._id}`)}
+          onClick={() =>
+            Router.push(
+              posted
+                ? `/detailPostedJob/${job?._id}`
+                : `/jobDetails/${job._id}`,
+            )
+          }
           className="my-2 py-2 px-4  border border-indigo-600   rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold"
         >
           View Detail <AiOutlineArrowRight className="mx-2 text-xl" />

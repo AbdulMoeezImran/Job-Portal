@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import Loader from "@/Components/Loader";
 
 export default function JobDetails() {
-  const userInfo = useSelector(state => state.user.userInfo);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const router = useRouter();
   const { id } = router.query;
   const [JobDetails, setJobDetails] = useState(null);
@@ -35,8 +35,6 @@ export default function JobDetails() {
   useEffect(() => {
     getJobById();
   }, [id]);
-
-  const handleBookMark = async () => {};
 
   return (
     <>
@@ -122,24 +120,18 @@ export default function JobDetails() {
                     Job Deadline has Expired
                   </p>
                 ) : (
-                  <div className="flex items-center justify-center  ">
-                    <BsFillBookmarkCheckFill
-                      onClick={handleBookMark}
-                      className="text-indigo-600 text-4xl cursor-pointer  mx-2"
-                    />
-                    <button
-                      onClick={() => {
-                        if (!userInfo) {
-                          errorToast("Please login to apply");
-                          return;
-                        }
-                        router.push(`/applyJob/${id}`);
-                      }}
-                      className="md:px-6 md:py-3 px-3 py-2 mt-2 md:mt-0 bg-indigo-500 rounded text-base tracking-widest uppercase transition-all duration-700 hover:bg-indigo-900 text-white  "
-                    >
-                      Apply Position
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => {
+                      if (!userInfo) {
+                        errorToast("Please login to apply");
+                        return;
+                      }
+                      router.push(`/applyJob/${id}`);
+                    }}
+                    className="md:px-6 md:py-3 px-3 py-2 mt-2 md:mt-0 bg-indigo-500 rounded text-base tracking-widest uppercase transition-all duration-700 hover:bg-indigo-900 text-white  "
+                  >
+                    Apply Position
+                  </button>
                 )}
               </div>
             </div>
@@ -166,7 +158,7 @@ export default function JobDetails() {
                 <p className="font-semibold text-base mx-1">Dead Line</p>
                 <p className=" text-sm text-gray-800 mx-1">
                   {new Date(`${JobDetails.job_deadline}`).toLocaleDateString(
-                    "en-GB"
+                    "en-GB",
                   )}
                 </p>
               </div>
