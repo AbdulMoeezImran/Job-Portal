@@ -15,3 +15,7 @@ export const getJobs = async () => {
 export const getJobById = async id => {
   return await jobsDatabase.findOne({ _id: id });
 };
+
+export const getPostedJobs = async email => {
+  return await jobsDatabase.find({ email });
+};

@@ -1,4 +1,9 @@
-import { postAJob, getJobs, getJobById } from "../../models/jobs.model.js";
+import {
+  postAJob,
+  getJobs,
+  getJobById,
+  getPostedJobs,
+} from "../../models/jobs.model.js";
 
 export const httpPostAJob = async (req, res) => {
   const email = req.email;
@@ -24,6 +29,17 @@ export const httpGetJobById = async (req, res) => {
   const id = req.params.id;
   try {
     const result = await getJobById(id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const httpGetPostedJobs = async (req, res) => {
+  const email = req.email;
+  console.log(email);
+  try {
+    const result = await getPostedJobs(email);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });
