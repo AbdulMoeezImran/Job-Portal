@@ -1,29 +1,11 @@
+import authDatabase from "./auth.mongo.js";
 import jobsDatabase from "./jobs.mongo.js";
 
-export const postAJob = async (user, data) => {
-  const { name, email } = user;
-  const {
-    title,
-    description,
-    salary,
-    company,
-    job_type,
-    job_experience,
-    job_vacancy,
-    job_deadline,
-  } = data;
-  return await jobsDatabase.create({
-    name,
-    email,
-    title,
-    description,
-    salary,
-    company,
-    job_type,
-    job_experience,
-    job_vacancy,
-    job_deadline,
-  });
+export const postAJob = async (email, data) => {
+  const user = await authDatabase.findOne({ email });
+  const { logo, company, address } = user;
+
+  return await jobsDatabase.create({ logo, email, company, address, ...data });
 };
 
 export const getJobs = async () => {

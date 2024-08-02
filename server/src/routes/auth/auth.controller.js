@@ -2,8 +2,10 @@ import {
   registerUser,
   loginUser,
   forgetPassword,
-  userInfo,
   resetPassword,
+  employerSetup,
+  getUserInfo,
+  updateUserInfo,
 } from "../../models/auth.model.js";
 
 export const httpRegisterUser = async (req, res) => {
@@ -48,10 +50,33 @@ export const httpResetPassword = async (req, res) => {
   }
 };
 
-export const httpUserInfo = async (req, res) => {
-  const data = req.user;
+export const httpEmployerSetup = async (req, res) => {
+  const email = req.email;
+  const data = req.body;
   try {
-    const result = await userInfo(data);
+    const result = await employerSetup(email, data);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const httpGetUserInfo = async (req, res) => {
+  const email = req.email;
+  try {
+    const result = await getUserInfo(email);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const httpUpdateUserInfo = async (req, res) => {
+  const email = req.email;
+  const file = req.file ? req.file.path : null;
+  const data = req.body;
+  try {
+    const result = await updateUserInfo(email, file, data);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });

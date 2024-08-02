@@ -1,10 +1,10 @@
 import { postAJob, getJobs, getJobById } from "../../models/jobs.model.js";
 
 export const httpPostAJob = async (req, res) => {
-  const user = req.user;
+  const email = req.email;
   const data = req.body;
   try {
-    const result = await postAJob(user, data);
+    const result = await postAJob(email, data);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });

@@ -1,13 +1,11 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
-import { appliedJobReducer, jobReducer, userReducer } from "./slice";
+import { userReducer } from "./slice";
 
 const logger = createLogger();
 
 const rootReducer = combineReducers({
   user: userReducer,
-  jobs: jobReducer,
-  appliedJobs: appliedJobReducer,
 });
 
 export const store = configureStore({
@@ -15,5 +13,5 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat([logger]),
+    }),
 });

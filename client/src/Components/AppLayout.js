@@ -12,20 +12,39 @@ const AppLayout = ({ children }) => {
   const router = useRouter();
   const location = router.pathname;
   const pathParts = location.split("/").filter(Boolean);
-  const shouldRedirect =
+  const isAuthPage =
     pathParts[1] === "login" ||
     pathParts[1] === "register" ||
     pathParts[1] === "forget-password";
-
+  const isProfilePage = pathParts[0] === "profile";
+  const isPostJobPage =
+    pathParts[0] === "postajob" || pathParts[0] === "postedjobs";
+  const isEmployerPage = pathParts[1] === "employer-setup";
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
 
+  // routes protecting
   useEffect(() => {
-    if (userInfo && shouldRedirect) {
+    // auth routes protecting
+    if (userInfo && isAuthPage) {
       router.push("/");
     }
-  }, [userInfo]);
+
+    // post job routes protecting
+    if (userInfo && !userInfo.company && isPostJobPage) {
+      router.push("/auth/employer-setup");
+    }
+
+    // employer route protecting
+    if (userInfo && userInfo.company && isEmployerPage) {
+      router.push("/postajob");
+    }
+
+    // if (!userInfo && (isProfilePage || isPostJobPage || isEmployerPage)) {
+    //   router.push("/auth/login");
+    // }
+  }, [pathParts]);
 
   return (
     <>

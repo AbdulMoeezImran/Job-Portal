@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { BiLogOut } from "react-icons/bi";
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import ProfileTooltip from "./ProfileTooltip";
 
 export default function NavBar() {
   const Router = useRouter();
   const userInfo = useSelector(state => state.user.userInfo);
-  const [openJobs, setOpenJobs] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -34,13 +32,25 @@ export default function NavBar() {
             Home
           </Link>
           <Link
-            href={userInfo ? "/postajob" : "/auth/login"}
+            href={
+              userInfo
+                ? userInfo.company
+                  ? "/postajob"
+                  : "/auth/employer-setup"
+                : "/auth/login"
+            }
             className="px-3 mx-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
           >
             Post Jobs
           </Link>
           <Link
-            href={userInfo ? "/postedjobs" : "/auth/login"}
+            href={
+              userInfo
+                ? userInfo.company
+                  ? "/postedjobs"
+                  : "/auth/employer-setup"
+                : "/auth/login"
+            }
             className="px-3 mx-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
           >
             Posted Jobs
@@ -53,15 +63,9 @@ export default function NavBar() {
           </Link>
         </div>
 
-        <div className="px-2 h-full hidden items-center justify-center lg:flex ">
+        <div className="px-2 h-full hidden lg:flex items-center justify-center">
           {userInfo !== null ? (
-            <>
-              <BiLogOut
-                onClick={handleLogout}
-                className=" cursor-pointer text-3xl hover:text-red-500 transition-all duration-700"
-              />
-              <p className="text-lg px-4 font-semibold">{userInfo.name}</p>
-            </>
+            <ProfileTooltip />
           ) : (
             <>
               <Link
@@ -80,11 +84,13 @@ export default function NavBar() {
           )}
         </div>
 
-        <div className="flex lg:hidden  px-2 py-2 ">
+        <div className="flex items-center gap-3 lg:hidden px-2 py-2">
           <GiHamburgerMenu
-            className="text-4xl"
+            className="text-3xl"
             onClick={() => setIsOpen(state => !state)}
           />
+
+          {userInfo !== null && <ProfileTooltip />}
         </div>
 
         {isOpen && (
@@ -98,14 +104,26 @@ export default function NavBar() {
                 Home
               </Link>
               <Link
-                href={userInfo ? "/postajob" : "/auth/login"}
+                href={
+                  userInfo
+                    ? userInfo.company
+                      ? "/postajob"
+                      : "/auth/employer-setup"
+                    : "/auth/login"
+                }
                 onClick={() => setIsOpen(false)}
                 className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
               >
                 Post Jobs
               </Link>
               <Link
-                href={userInfo ? "/postedjobs" : "/auth/login"}
+                href={
+                  userInfo
+                    ? userInfo.company
+                      ? "/postedjobs"
+                      : "/auth/employer-setup"
+                    : "/auth/login"
+                }
                 onClick={() => setIsOpen(false)}
                 className="px-3 m-4 text-base font-medium transition-all duration-700 hover:translate-y-2 uppercase"
               >
@@ -121,15 +139,7 @@ export default function NavBar() {
             </div>
 
             <div className="px-2 h-full  items-center justify-center flex">
-              {userInfo !== null ? (
-                <>
-                  <BiLogOut
-                    onClick={handleLogout}
-                    className=" cursor-pointer text-3xl hover:text-red-500 transition-all duration-700"
-                  />
-                  <p className="text-lg px-4 font-semibold">{userInfo.name}</p>
-                </>
-              ) : (
+              {userInfo === null && (
                 <>
                   <Link
                     href={"/auth/login"}

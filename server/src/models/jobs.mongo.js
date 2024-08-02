@@ -1,11 +1,18 @@
 import mongoose from "mongoose";
 
 const JobsSchema = new mongoose.Schema({
-  name: {
+  logo: {
+    type: String,
+  },
+  email: {
     type: String,
     required: true,
   },
-  email: {
+  company: {
+    type: String,
+    required: true,
+  },
+  address: {
     type: String,
     required: true,
   },
@@ -13,15 +20,19 @@ const JobsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
   salary: {
     type: Number,
     required: true,
   },
-  company: {
+  description: {
+    type: String,
+    required: true,
+  },
+  education: {
+    type: String,
+    required: true,
+  },
+  industry: {
     type: String,
     required: true,
   },

@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Global component styling*/
+  // flex container
+  .flex-rc {
+    @apply flex items-center;
+  }
+
+  .flex-rcc {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-c {
+    @apply flex flex-col;
+  }
+
+  .flex-cc {
+    @apply flex flex-col items-center;
+  }
+
+  .flex-ccc {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .flex-rwcb {
+    @apply flex flex-wrap items-center justify-between gap-3;
+  }
+
+  // checkbox
+  .checkbox-input {
+    @apply size-3.5 cursor-pointer appearance-none rounded-sm bg-[#DBDFE9] checked:bg-blue-500;
+  }
+
+  // popup
+  .popup-container {
+    @apply flex-rcc fixed inset-0 z-[1000] p-5;
+  }
+  .popup-inner-section {
+    @apply relative z-20 rounded-md bg-white shadow-lg;
+  }
+  .popup-close {
+    @apply fixed inset-0 z-10 bg-black/50;
+  }
+}

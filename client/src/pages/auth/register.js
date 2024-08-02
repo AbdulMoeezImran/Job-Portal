@@ -5,8 +5,11 @@ import { postRequest } from "@/GlobalFunctions/ApiRequest";
 
 export default function Register() {
   const [formData, setFormData] = useState({
+    logo: null,
     name: "",
     email: "",
+    company: null,
+    address: "",
     password: "",
   });
 
@@ -21,7 +24,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex w-full bg-indigo-600 flex-col text-center items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0 shadow-xl">
+    <div className="flex w-full bg-indigo-600 flex-col text-center items-center justify-center px-6 py-8 mx-auto min-h-screen h-full lg:py-0 shadow-xl">
       <div className="w-full bg-white rounded-lg shadow dark:border text-black md:mt-0 sm:max-w-md xl:p-0 ">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
@@ -41,7 +44,7 @@ export default function Register() {
                 }
                 type="text"
                 name="name"
-                id="namw"
+                id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5"
                 placeholder="Name"
                 required
@@ -63,6 +66,25 @@ export default function Register() {
                 id="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5"
                 placeholder="name@company.com"
+                required
+              />
+            </div>
+            <div className="text-left">
+              <label
+                htmlFor="address"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                Address
+              </label>
+              <input
+                onChange={e =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
+                type="text"
+                name="address"
+                id="address"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5"
+                placeholder="City"
                 required
               />
             </div>

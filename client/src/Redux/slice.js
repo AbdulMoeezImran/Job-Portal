@@ -17,7 +17,12 @@ export const userSlice = createSlice({
     userInfo: null,
     userPending: true,
   },
-  reducers: {},
+  reducers: {
+    setUserData(state, action) {
+      state.userInfo = action.payload;
+      state.userPending = false;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchUser.pending, state => {
@@ -33,47 +38,6 @@ export const userSlice = createSlice({
   },
 });
 
+export const { setUserData } = userSlice.actions;
+
 export const userReducer = userSlice.reducer;
-
-// Job Slice
-export const jobSlice = createSlice({
-  name: "Job",
-  initialState: {
-    JobData: [],
-    myJobs: null,
-  },
-  reducers: {
-    setJobData: (state, action) => {
-      state.JobData = action.payload;
-    },
-    setMyJobs: (state, action) => {
-      state.myJobs = action.payload;
-    },
-  },
-});
-
-export const { setJobData, setMyJobs } = jobSlice.actions;
-
-export const jobReducer = jobSlice.reducer;
-
-//  Applied Job Slice
-export const appliedJobSlice = createSlice({
-  name: "AppliedJob",
-  initialState: {
-    appliedJob: [],
-    bookMark: [],
-  },
-  reducers: {
-    setAppliedJob: (state, action) => {
-      state.appliedJob = action.payload;
-    },
-    setBookMark: (state, action) => {
-      state.bookMark = action.payload;
-    },
-  },
-});
-
-// Action creators are generated for each case reducer function
-export const { setAppliedJob, setBookMark } = appliedJobSlice.actions;
-
-export const appliedJobReducer = appliedJobSlice.reducer;

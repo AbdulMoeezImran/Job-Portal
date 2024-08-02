@@ -1,14 +1,38 @@
 import Select from "react-select";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Router from "next/router";
 import { postRequest } from "@/GlobalFunctions/ApiRequest";
 import { useSelector } from "react-redux";
 
-const options = [
-  { value: "fulltime", label: "Full Time" },
-  { value: "parttime", label: "Part Time" },
-  { value: "internship", label: "Internship" },
-  { value: "contract", label: "Contract" },
+const educationValues = [
+  { value: "Intermediate", label: "Intermediate" },
+  { value: "Bachlor", label: "Bachlor" },
+  { value: "Master", label: "Master" },
+];
+
+const industryValues = [
+  { value: "Business", label: "Business" },
+  { value: "Banking", label: "Bachlor" },
+  { value: "Education", label: "Education" },
+  { value: "Telecommunication", label: "Telecommunication" },
+  { value: "Others", label: "Others" },
+];
+
+const jobTypeValues = [
+  { value: "Permanent", label: "Permanent" },
+  { value: "Contractual", label: "Contractual" },
+  { value: "Full Time", label: "Full Time" },
+  { value: "Part Time", label: "Part Time" },
+];
+
+const jobExperienceValues = [
+  { value: "0 Year", label: "0 Year" },
+  { value: "1 Year", label: "1 Year" },
+  { value: "2 Years", label: "2 Years" },
+  { value: "3 Years", label: "3 Years" },
+  { value: "5 Years", label: "5 Years" },
+  { value: "10 Years", label: "10 Years" },
+  { value: "10+ Years", label: "10+ Years" },
 ];
 
 export default function Postajob() {
@@ -16,8 +40,9 @@ export default function Postajob() {
   const [formData, setFormData] = useState({
     title: "",
     salary: 0,
-    company: "",
     description: "",
+    education: "",
+    industry: "",
     job_type: "",
     job_experience: "",
     job_vacancy: 0,
@@ -34,12 +59,6 @@ export default function Postajob() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (!userInfo) {
-      Router.push("/auth/login");
-    }
-  }, [userInfo]);
 
   return (
     <div className="w-full  py-20 flex items-center  justify-center flex-col">
@@ -73,25 +92,11 @@ export default function Postajob() {
             min="0"
             id="salary"
             className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"
-            placeholder="Enter Salary for this job"
+            placeholder="Enter salary per month"
             required
           />
         </div>
-        <div className="w-full mb-4  flex flex-col items-start justify-center">
-          <label htmlFor="company" className="mb-1 text-base font-semibold">
-            Company :
-          </label>
-          <input
-            onChange={e =>
-              setFormData({ ...formData, company: e.target.value })
-            }
-            type="text"
-            id="company"
-            className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"
-            placeholder="Enter Company of job"
-            required
-          />
-        </div>
+
         <div className="w-full mb-4  flex flex-col items-start justify-center">
           <label htmlFor="description" className="mb-1 text-base font-semibold">
             Description :
@@ -107,6 +112,35 @@ export default function Postajob() {
             required
           />
         </div>
+
+        <div className="w-full mb-4  flex flex-col items-start justify-center">
+          <label htmlFor="education" className="mb-1 text-base font-semibold">
+            Education :
+          </label>
+          <Select
+            id="education"
+            className="w-full mb-2 border border-indigo-600 rounded"
+            onChange={e => setFormData({ ...formData, education: e.value })}
+            placeholder="Please Select Education"
+            options={educationValues}
+            required
+          />
+        </div>
+
+        <div className="w-full mb-4  flex flex-col items-start justify-center">
+          <label htmlFor="industry" className="mb-1 text-base font-semibold">
+            Industry :
+          </label>
+          <Select
+            id="industry"
+            className="w-full mb-2 border border-indigo-600 rounded"
+            onChange={e => setFormData({ ...formData, industry: e.value })}
+            placeholder="Please Select Industry"
+            options={industryValues}
+            required
+          />
+        </div>
+
         <div className="w-full mb-4  flex flex-col items-start justify-center">
           <label htmlFor="jobType" className="mb-1 text-base font-semibold">
             Job Type :
@@ -116,29 +150,27 @@ export default function Postajob() {
             className="w-full mb-2 border border-indigo-600 rounded"
             onChange={e => setFormData({ ...formData, job_type: e.value })}
             placeholder="Please Select Job type"
-            options={options}
+            options={jobTypeValues}
             required
           />
         </div>
 
         <div className="w-full mb-4  flex flex-col items-start justify-center">
-          <label
-            htmlFor="jobExperience"
-            className="mb-1 text-base font-semibold"
-          >
+          <label htmlFor="jobType" className="mb-1 text-base font-semibold">
             Job Experience :
           </label>
-          <input
+          <Select
+            id="jobType"
+            className="w-full mb-2 border border-indigo-600 rounded"
             onChange={e =>
-              setFormData({ ...formData, job_experience: e.target.value })
+              setFormData({ ...formData, job_experience: e.value })
             }
-            type="text"
-            id="jobExperience"
-            className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"
-            placeholder="Enter Experience Required for this job"
+            placeholder="Please Select Job type"
+            options={jobExperienceValues}
             required
           />
         </div>
+
         <div className="w-full mb-4  flex flex-col items-start justify-center">
           <label htmlFor="jobva" className="mb-1 text-base font-semibold">
             Job Vacancy :
@@ -148,7 +180,7 @@ export default function Postajob() {
               setFormData({ ...formData, job_vacancy: e.target.value })
             }
             min="0"
-            max="1000"
+            max="100"
             type="number"
             id="jobva"
             className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"

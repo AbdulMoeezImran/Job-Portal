@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const authSchema = new mongoose.Schema({
+  logo: {
+    type: String,
+  },
   name: {
     type: String,
     required: true,
@@ -9,6 +12,13 @@ const authSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  company: {
+    type: String,
+  },
+  address: {
+    type: String,
+    required: true,
   },
   password: {
     type: String,

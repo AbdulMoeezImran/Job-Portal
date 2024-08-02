@@ -2,13 +2,13 @@ import authDatabase from "./auth.mongo.js";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 
-export const registerUser = async ({ name, email, password }) => {
-  const findUser = await authDatabase.findOne({ email });
+export const registerUser = async data => {
+  const findUser = await authDatabase.findOne({ email: data.email });
   if (findUser) {
     throw new Error("Email already registered");
   }
 
-  return await authDatabase.create({ name, email, password });
+  return await authDatabase.create(data);
 };
 
 export const loginUser = async ({ email, password }) => {
@@ -20,13 +20,15 @@ export const loginUser = async ({ email, password }) => {
   if (password !== findUser.password) {
     throw new Error("Password is incorrect");
   }
-
   const accessToken = jwt.sign(
-    { name: findUser.name, email: findUser.email },
+    { email: findUser.email },
     process.env.ACCESS_TOKEN_SECRET
   );
 
-  return accessToken;
+  return {
+    accessToken,
+    userInfo: findUser,
+  };
 };
 
 export const forgetPassword = async ({ email }) => {
@@ -104,8 +106,32 @@ export const resetPassword = async (id, { password }) => {
   );
 };
 
-export const userInfo = async ({ email }) => {
+export const employerSetup = async (email, { company }) => {
+  const user = await authDatabase.findOneAndUpdate(
+    { email },
+    { company },
+    {
+      new: true,
+    }
+  );
+
+  return user;
+};
+
+export const getUserInfo = async email => {
   const findUser = await authDatabase.findOne({ email });
 
-  return { id: findUser._id, email: findUser.email, name: findUser.name };
+  return findUser;
+};
+
+export const updateUserInfo = async (email, file, data) => {
+  const logo = file ? `http://localhost:4000/${file}` : null;
+  const user = await authDatabase.findOneAndUpdate(
+    { email },
+    { logo, ...data },
+    {
+      new: true,
+    }
+  );
+  return user;
 };

@@ -4,8 +4,9 @@ import { BsBriefcaseFill, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { RiUserSearchFill } from "react-icons/ri";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
+import { FaIndustry } from "react-icons/fa";
 import { HiOutlineStar } from "react-icons/hi";
-import { FaUserAstronaut } from "react-icons/fa";
+import { FaAddressCard } from "react-icons/fa";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { getRequest } from "@/GlobalFunctions/ApiRequest";
@@ -35,14 +36,6 @@ export default function JobDetails() {
     getJobById();
   }, [id]);
 
-  const handleApply = () => {
-    if (!userInfo) {
-      errorToast("Please login to apply");
-      return;
-    }
-    router.push(`/applyJob/${id}`);
-  };
-
   const handleBookMark = async () => {};
 
   return (
@@ -51,21 +44,29 @@ export default function JobDetails() {
         <Loader />
       ) : JobDetails ? (
         <div className="w-full py-20 flex items-center md:px-8 px-2 justify-center flex-col">
-          <div className="w-full h-40 bg-gray-50 text-indigo-600 font-bold flex items-center justify-center flex-col">
+          <div className="w-full h-40 text-indigo-600 font-bold flex items-center justify-center flex-col">
             <h1 className="text-3xl">Job Details</h1>
           </div>
           {/* Job User Details */}
           <div className="flex items-center justify-center w-full py-10">
             <div className="flex w-full px-8 md:px-20 items-center md:flex-row gap-10 flex-col md:justify-between justify-center">
               <div className="flex mb-1 items-center justify-center">
-                <p className="bg-indigo-600 mb-2 text-white rounded-full text-xl size-[100px] flex justify-center items-center">
-                  {JobDetails.name.slice(0, 2).toUpperCase()}
-                </p>
+                {JobDetails.logo ? (
+                  <img
+                    src={JobDetails.logo}
+                    className="size-[100px] rounded-full mb-2"
+                    alt="profile"
+                  />
+                ) : (
+                  <p className="bg-indigo-600 mb-2 text-white rounded-full text-xl size-[100px] flex justify-center items-center">
+                    {JobDetails.company.slice(0, 2).toUpperCase()}
+                  </p>
+                )}
                 <div className="px-4 mx-2 flex flex-col items-start justify-center">
                   <p className="font-semibold text-base mb-1">
-                    {JobDetails.title}{" "}
+                    {JobDetails.title}
                   </p>
-                  <p className=" text-sm text-gray-800 mb-1">
+                  <p className="text-sm text-gray-800 mb-1">
                     {JobDetails.company}
                   </p>
                 </div>
@@ -74,17 +75,24 @@ export default function JobDetails() {
               {/* Job highlights */}
               <div className="md:px-4 mb-1 px-2 md:mx-2 flex flex-wrap items-center grow justify-between">
                 <div className="flex items-center justify-center mb-1">
-                  <FaUserAstronaut className="text-xs font-semibold text-indigo-600" />
-                  <p className="font-semibold text-base mx-1">Job Poster </p>
+                  <FaAddressCard className="text-xs font-semibold text-indigo-600" />
+                  <p className="font-semibold text-base mx-1">Address </p>
                   <p className=" text-sm text-gray-800 mx-1">
-                    {JobDetails.name}
+                    {JobDetails.address}
                   </p>
                 </div>
                 <div className="flex items-center justify-center mb-1">
                   <MdEmail className="text-xs font-semibold text-indigo-600" />
-                  <p className="font-semibold text-base mx-1">Email </p>
+                  <p className="font-semibold text-base mx-1">Education </p>
                   <p className=" text-sm text-gray-800 mx-1">
-                    {JobDetails.email}
+                    {JobDetails.education}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center mb-1">
+                  <FaIndustry className="text-xs font-semibold text-indigo-600" />
+                  <p className="font-semibold text-base mx-1">Job Industry </p>
+                  <p className="text-sm text-gray-800 mx-1">
+                    {JobDetails.industry}
                   </p>
                 </div>
                 <div className="flex items-center justify-center mb-1">
@@ -98,7 +106,7 @@ export default function JobDetails() {
                   <AiOutlineDollarCircle className="text-xs font-semibold text-indigo-600" />
                   <p className="font-semibold text-base mx-1">Salary </p>
                   <p className=" text-sm text-gray-800 mx-1">
-                    $ {JobDetails.salary}{" "}
+                    {JobDetails.salary}
                   </p>
                 </div>
               </div>
@@ -109,6 +117,10 @@ export default function JobDetails() {
                   <p className="text-xs text-red-500">
                     unable Apply to your Own jobs
                   </p>
+                ) : new Date() > new Date(JobDetails.job_deadline) ? (
+                  <p className="text-xs text-red-500">
+                    Job Deadline has Expired
+                  </p>
                 ) : (
                   <div className="flex items-center justify-center  ">
                     <BsFillBookmarkCheckFill
@@ -116,7 +128,13 @@ export default function JobDetails() {
                       className="text-indigo-600 text-4xl cursor-pointer  mx-2"
                     />
                     <button
-                      onClick={handleApply}
+                      onClick={() => {
+                        if (!userInfo) {
+                          errorToast("Please login to apply");
+                          return;
+                        }
+                        router.push(`/applyJob/${id}`);
+                      }}
                       className="md:px-6 md:py-3 px-3 py-2 mt-2 md:mt-0 bg-indigo-500 rounded text-base tracking-widest uppercase transition-all duration-700 hover:bg-indigo-900 text-white  "
                     >
                       Apply Position

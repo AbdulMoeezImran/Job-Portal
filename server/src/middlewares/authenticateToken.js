@@ -6,9 +6,9 @@ export default function authenticateToken(req, res, next) {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
     if (err) return res.sendStatus(403);
-    req.user = user;
+    req.email = data.email;
     next();
   });
 }

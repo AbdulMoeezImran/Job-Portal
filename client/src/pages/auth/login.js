@@ -3,9 +3,9 @@ import Link from "next/link";
 import Router from "next/router";
 import { postRequest } from "@/GlobalFunctions/ApiRequest";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "@/Redux/slice";
+import { setUserData } from "@/Redux/slice";
 
-export default function Login({ getUser }) {
+export default function Login() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
@@ -17,17 +17,16 @@ export default function Login({ getUser }) {
         formData,
         "application/json"
       );
-
-      localStorage.setItem("authToken", data);
-      Router.push("/");
-      dispatch(fetchUser());
+      console.log(data);
+      localStorage.setItem("authToken", data.accessToken);
+      dispatch(setUserData(data.userInfo));
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center w-full bg-indigo-600 text-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
+    <div className="flex flex-col items-center w-full bg-indigo-600 text-center justify-center px-6 py-8 mx-auto min-h-screen h-full lg:py-0">
       <div className="w-full bg-white text-black rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
