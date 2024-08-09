@@ -5,29 +5,11 @@ import { getRequest } from "@/GlobalFunctions/ApiRequest";
 import useSWR from "swr";
 import CheckBoxLayout from "@/Components/CheckBoxLayout";
 import { GrClose } from "react-icons/gr";
-
-const educationValues = [
-  { value: "Intermediate", label: "Intermediate" },
-  { value: "Bachlor", label: "Bachlor" },
-  { value: "Master", label: "Master" },
-];
-
-const jobTypeValues = [
-  { value: "Permanent", label: "Permanent" },
-  { value: "Contractual", label: "Contractual" },
-  { value: "Full Time", label: "Full Time" },
-  { value: "Part Time", label: "Part Time" },
-];
-
-const jobExperienceValues = [
-  { value: "0 Year", label: "0 Year" },
-  { value: "1 Year", label: "1 Year" },
-  { value: "2 Years", label: "2 Years" },
-  { value: "3 Years", label: "3 Years" },
-  { value: "5 Years", label: "5 Years" },
-  { value: "10 Years", label: "10 Years" },
-  { value: "10+ Years", label: "10+ Years" },
-];
+import {
+  educationValues,
+  jobTypeValues,
+  jobExperienceValues,
+} from "@/Data/JobValData";
 
 const jobSalaryValues = [
   { value: "0-20000", label: "Rs 0-20000" },
@@ -50,6 +32,12 @@ export default function Home() {
     salaryRange: [],
   });
   const [filterPopup, setFilterPopup] = useState(false);
+  const [topicStats, setTopicStats] = useState({
+    totalJobs: 0,
+    averageSalary: 0,
+    maxSalary: 0,
+    minSalary: Infinity,
+  });
 
   const getJob = async () => {
     try {
@@ -62,25 +50,19 @@ export default function Home() {
 
   const { isLoading } = useSWR("/getjobs", getJob);
 
-  const handleFilterChange = e => {
+  const handleFilterChange = (e) => {
     const { name, value, checked } = e.target;
-    setFilters(prevState => {
-      if (name === "address") {
-        return { ...prevState, address: value.toLowerCase().trim() };
-      } else if (checked) {
+    setFilters((prevState) => {
+      if (checked) {
         return { ...prevState, [name]: [...prevState[name], value] };
       } else {
         return {
           ...prevState,
-          [name]: prevState[name].filter(item => item !== value),
+          [name]: prevState[name].filter((item) => item !== value),
         };
       }
     });
   };
-
-  const uniqueAddresses = [
-    ...new Set(JobData.map(job => job.address.toLowerCase().trim())),
-  ];
 
   const filterJobsBySalaryRange = (job, salaryRange) => {
     for (const range of salaryRange) {
@@ -92,7 +74,7 @@ export default function Home() {
     return false;
   };
 
-  const filteredJobs = JobData.filter(job => {
+  const filteredJobs = JobData.filter((job) => {
     const matchesSearchQuery =
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.address.toLowerCase().includes(searchQuery.toLowerCase());
@@ -108,67 +90,97 @@ export default function Home() {
     const matchesSalary =
       filters.salaryRange.length === 0 ||
       filterJobsBySalaryRange(job, filters.salaryRange);
-    const matchesAddress =
-      filters.address === "" ||
-      job.address.toLowerCase().trim() === filters.address;
 
     return (
       matchesSearchQuery &&
       matchesJobType &&
       matchesEducation &&
       matchesExperience &&
-      matchesSalary &&
-      matchesAddress
+      matchesSalary
     );
   });
+
+  useEffect(() => {
+    calculateTopicStats(filteredJobs);
+  }, [filteredJobs]);
+
+  const calculateTopicStats = (jobs) => {
+    if (jobs.length === 0) {
+      setTopicStats({
+        totalJobs: 0,
+        averageSalary: 0,
+        maxSalary: 0,
+        minSalary: 0,
+      });
+      return;
+    }
+
+    const salaries = jobs.map((job) => job.salary);
+    const totalJobs = jobs.length;
+    const averageSalary = (
+      salaries.reduce((acc, salary) => acc + salary, 0) / totalJobs
+    ).toFixed(0);
+    const maxSalary = Math.max(...salaries);
+    const minSalary = Math.min(...salaries);
+
+    setTopicStats({
+      totalJobs,
+      averageSalary,
+      maxSalary,
+      minSalary,
+    });
+  };
 
   return isLoading ? (
     <Loader />
   ) : (
     <>
-      <div className="w-full py-20 flex items-center md:px-8 px-2 justify-center flex-col">
-        <div className="md:flex-rcc w-[80%] max-md:flex-ccc gap-1 my-4">
-          <div className="flex w-full max-md:flex-col gap-1">
+      <div className="flex w-full flex-col items-center justify-center px-2 py-20 md:px-8">
+        <div className="my-4 w-[80%] sm:w-[60%]">
+          <div className="md:flex-rcc max-md:flex-ccc gap-1">
             {/* Search Bar */}
             <input
               type="text"
-              placeholder="Search jobs..."
+              placeholder="Search jobs by title or location"
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="mb-2 w-full rounded border border-indigo-600 px-3 py-2"
             />
 
-            {/* Address Filter */}
-            <select
-              name="address"
-              value={filters.address}
-              onChange={handleFilterChange}
-              className="w-full py-2 px-3 mb-2 border border-indigo-600 rounded"
+            <button
+              className="mb-2 w-full rounded bg-indigo-600 px-5 py-2.5 text-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 md:w-fit"
+              onClick={() => setFilterPopup(true)}
             >
-              <option value="" selected disabled hidden>
-                Address
-              </option>
-              {uniqueAddresses.map((address, index) => (
-                <option key={index} value={address} className=" capitalize ">
-                  {address}
-                </option>
-              ))}
-            </select>
+              Filters
+            </button>
           </div>
-          <button
-            className="w-full md:w-fit mb-2 text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded px-5 py-2.5 text-center"
-            onClick={() => setFilterPopup(true)}
-          >
-            Filters
-          </button>
+          {/* Topic Statistics */}
+          {searchQuery && (
+            <div className="flex-rc flex-wrap gap-2">
+              <h2 className="text-lg font-semibold">Job Statistics:</h2>
+              <p className="w-fit rounded border border-indigo-600 p-1 text-xs text-indigo-600">
+                Total Jobs: {topicStats.totalJobs}
+              </p>
+              <p className="w-fit rounded border border-indigo-600 p-1 text-xs text-indigo-600">
+                Average Salary: Rs {topicStats.averageSalary}
+              </p>
+              <p className="w-fit rounded border border-indigo-600 p-1 text-xs text-indigo-600">
+                Maximum Salary: Rs {topicStats.maxSalary}
+              </p>
+              <p className="w-fit rounded border border-indigo-600 p-1 text-xs text-indigo-600">
+                Minimum Salary: Rs {topicStats.minSalary}
+              </p>
+            </div>
+          )}
         </div>
 
-        <h1 className="px-4 mx-2 py-2 uppercase tracking-wider border-b-2 border-b-indigo-600 text-3xl font-semibold">
+        <h1 className="mx-2 border-b-2 border-b-indigo-600 px-4 py-2 text-3xl font-semibold uppercase tracking-wider">
           Available Jobs
         </h1>
-        <div className="w-full h-full py-4 flex overflow-y-auto items-center justify-center flex-wrap">
+
+        <div className="flex h-full w-full flex-wrap items-center justify-center overflow-y-auto py-4">
           {filteredJobs.length > 0 ? (
-            filteredJobs.map(job => <JobsCard job={job} key={job._id} />)
+            filteredJobs.map((job) => <JobsCard job={job} key={job._id} />)
           ) : (
             <p>No jobs found</p>
           )}
@@ -177,7 +189,7 @@ export default function Home() {
 
       {filterPopup && (
         <div className="popup-container">
-          <div className="popup-inner-section w-full max-w-md p-6 flex-c gap-3">
+          <div className="popup-inner-section flex-c w-full max-w-md gap-3 p-6">
             <div className="flex items-center justify-between gap-2">
               <h4 className="text-xl font-bold text-indigo-600">Filters</h4>
               <GrClose
@@ -186,26 +198,12 @@ export default function Home() {
               />
             </div>
 
-            <div className="flex-rwcb">
-              {/* <label className="flex min-w-[48%] flex-grow flex-col gap-1">
-                Audio Transcriptions Minutes
-                <input
-                  type="number"
-                  min="0"
-                  max={dataLimits.remainingVoiceovers}
-                  className="field-md2"
-                  value={formData.transcriptions}
-                  onChange={e =>
-                    setFormData({ ...formData, transcriptions: e.target.value })
-                  }
-                />
-              </label> */}
-
+            <div className="flex-rwcb overflow-y-auto">
               {/* Job Type Filters */}
               <div>
                 <h2 className="font-semibold">Job Type</h2>
                 <div className="flex flex-wrap gap-3">
-                  {jobTypeValues.map(type => (
+                  {jobTypeValues.map((type) => (
                     <label key={type.value} className="flex-rcc">
                       <CheckBoxLayout>
                         <input
@@ -213,6 +211,7 @@ export default function Home() {
                           name="jobType"
                           value={type.value}
                           onChange={handleFilterChange}
+                          checked={filters.jobType.includes(type.value)}
                           className="checkbox-input peer"
                         />
                       </CheckBoxLayout>
@@ -226,7 +225,7 @@ export default function Home() {
               <div>
                 <h2 className="font-semibold">Education</h2>
                 <div className="flex flex-wrap gap-3">
-                  {educationValues.map(edu => (
+                  {educationValues.map((edu) => (
                     <label key={edu.value} className="flex-rcc">
                       <CheckBoxLayout>
                         <input
@@ -234,6 +233,7 @@ export default function Home() {
                           name="education"
                           value={edu.value}
                           onChange={handleFilterChange}
+                          checked={filters.education.includes(edu.value)}
                           className="checkbox-input peer"
                         />
                       </CheckBoxLayout>
@@ -247,7 +247,7 @@ export default function Home() {
               <div>
                 <h2 className="font-semibold">Experience</h2>
                 <div className="flex flex-wrap gap-3">
-                  {jobExperienceValues.map(exp => (
+                  {jobExperienceValues.map((exp) => (
                     <label key={exp.value} className="flex-rcc">
                       <CheckBoxLayout>
                         <input
@@ -255,6 +255,7 @@ export default function Home() {
                           name="experience"
                           value={exp.value}
                           onChange={handleFilterChange}
+                          checked={filters.experience.includes(exp.value)}
                           className="checkbox-input peer"
                         />
                       </CheckBoxLayout>
@@ -268,7 +269,7 @@ export default function Home() {
               <div>
                 <h2 className="font-semibold">Salary Range</h2>
                 <div className="flex flex-wrap gap-3">
-                  {jobSalaryValues.map(salary => (
+                  {jobSalaryValues.map((salary) => (
                     <label key={salary.value} className="flex-rcc">
                       <CheckBoxLayout>
                         <input
@@ -276,6 +277,7 @@ export default function Home() {
                           name="salaryRange"
                           value={salary.value}
                           onChange={handleFilterChange}
+                          checked={filters.salaryRange.includes(salary.value)}
                           className="checkbox-input peer"
                         />
                       </CheckBoxLayout>

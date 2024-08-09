@@ -9,7 +9,7 @@ import {
   httpUpdateUserInfo,
 } from "./auth.controller.js";
 import authenticateToken from "../../middlewares/authenticateToken.js";
-import upload from "../../middlewares/uploads.js";
+import uploadLogo from "../../middlewares/uploadLogo.js";
 
 const authRouter = express.Router();
 
@@ -22,7 +22,7 @@ authRouter.get("/userinfo", authenticateToken, httpGetUserInfo);
 authRouter.put(
   "/userinfo",
   authenticateToken,
-  upload.single("logo"),
+  uploadLogo.single("logo"),
   httpUpdateUserInfo
 );
 

@@ -74,6 +74,8 @@ export const httpGetUserInfo = async (req, res) => {
 export const httpUpdateUserInfo = async (req, res) => {
   const email = req.email;
   const file = req.file ? req.file.path : null;
+  console.log(req.file);
+  console.log(file);
   const data = req.body;
   try {
     const result = await updateUserInfo(email, file, data);

@@ -3,6 +3,7 @@ import {
   getJobs,
   getJobById,
   getPostedJobs,
+  updateAJob,
 } from "../../models/jobs.model.js";
 
 export const httpPostAJob = async (req, res) => {
@@ -10,6 +11,16 @@ export const httpPostAJob = async (req, res) => {
   const data = req.body;
   try {
     const result = await postAJob(email, data);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+export const httpUpdateAJob = async (req, res) => {
+  const email = req.email;
+  const data = req.body;
+  try {
+    const result = await updateAJob(email, data);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });

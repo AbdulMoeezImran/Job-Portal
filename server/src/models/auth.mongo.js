@@ -24,6 +24,9 @@ const authSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  cv: {
+    type: String,
+  },
 });
 
 const authDatabase = mongoose.model("auth", authSchema);

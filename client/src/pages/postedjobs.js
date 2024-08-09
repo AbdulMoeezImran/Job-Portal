@@ -29,13 +29,17 @@ export default function PostedJobs() {
         <Loader />
       ) : (
         <div className="w-full pt-20">
-          <div className="w-full h-20 text-indigo-600 font-bold flex items-center justify-center flex-col">
+          <div className="flex h-20 w-full flex-col items-center justify-center font-bold text-indigo-600">
             <h1 className="text-3xl">Posted Jobs</h1>
           </div>
-          <div className="w-full h-full px-4 py-4 flex  overflow-y-auto  items-start justify-center flex-wrap">
-            {myJobs?.map((job, index) => (
-              <JobsCard key={index} job={job} posted={true} />
-            ))}
+          <div className="flex h-full w-full flex-wrap items-start justify-center overflow-y-auto px-4 py-4">
+            {myJobs.length > 0 ? (
+              myJobs.map((job, index) => (
+                <JobsCard key={index} job={job} posted={true} />
+              ))
+            ) : (
+              <p>No jobs found</p>
+            )}
           </div>
         </div>
       )}

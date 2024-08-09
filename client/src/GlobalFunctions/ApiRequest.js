@@ -1,7 +1,7 @@
 import axios from "axios";
 import { errorToast } from "./toasts";
 
-export const getRequest = async url => {
+export const getRequest = async (url) => {
   try {
     const response = await axios.get("http://localhost:4000/api" + url, {
       headers: {
@@ -33,8 +33,6 @@ export const postRequest = async (url, data, type) => {
 };
 
 export const putRequest = async (url, data, type) => {
-  console.log("http://localhost:4000/api" + url);
-
   try {
     const response = await axios.put("http://localhost:4000/api" + url, data, {
       headers: {

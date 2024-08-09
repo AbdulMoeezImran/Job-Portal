@@ -39,7 +39,7 @@
     @apply flex-rcc fixed inset-0 z-[1000] p-5;
   }
   .popup-inner-section {
-    @apply relative z-20 rounded-md bg-white shadow-lg;
+    @apply relative z-20 max-h-[90vh] rounded-md bg-white shadow-lg;
   }
   .popup-close {
     @apply fixed inset-0 z-10 bg-black/50;
