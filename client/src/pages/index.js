@@ -102,7 +102,7 @@ export default function Home() {
 
   useEffect(() => {
     calculateTopicStats(filteredJobs);
-  }, [filteredJobs]);
+  }, [searchQuery]);
 
   const calculateTopicStats = (jobs) => {
     if (jobs.length === 0) {
