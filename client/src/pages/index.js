@@ -115,8 +115,10 @@ export default function Home() {
       return;
     }
 
-    const salaries = jobs.map((job) => job.salary);
+    // Convert salary strings to numbers
+    const salaries = jobs.map((job) => Number(job.salary));
     const totalJobs = jobs.length;
+
     const averageSalary = (
       salaries.reduce((acc, salary) => acc + salary, 0) / totalJobs
     ).toFixed(0);
