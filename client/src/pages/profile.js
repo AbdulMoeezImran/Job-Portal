@@ -8,7 +8,7 @@ import { setUserData } from "@/Redux/slice";
 
 const profile = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector(state => state.user.userInfo);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const [formData, setFormData] = useState({
     logo: userInfo?.logo,
     name: userInfo?.name,
@@ -17,7 +17,7 @@ const profile = () => {
     address: userInfo?.address,
   });
 
-  const updateProfile = async e => {
+  const updateProfile = async (e) => {
     e.preventDefault();
 
     const form = new FormData();
@@ -34,7 +34,7 @@ const profile = () => {
       const data = await putRequest(
         "/auth/userinfo",
         form,
-        "multipart/form-data"
+        "multipart/form-data",
       );
       dispatch(setUserData(data));
       successToast("Profile Updated");
@@ -43,7 +43,7 @@ const profile = () => {
     }
   };
 
-  const handleFileSelection = event => {
+  const handleFileSelection = (event) => {
     const file = event.target.files[0];
     if (file && /\.(gif|png|jpeg)$/i.test(file.name)) {
       setFormData({ ...formData, logo: file });
@@ -53,18 +53,18 @@ const profile = () => {
       }
     } else {
       alert(
-        "Enter the valid image file. You can use png, jpeg, and Gif as your profile picture"
+        "Enter the valid image file. You can use png, jpeg, and Gif as your profile picture",
       );
     }
   };
 
   return (
-    <div className="w-full py-20 flex items-center md:px-8 px-2 justify-center flex-col">
-      <div className="w-full h-20 flex-rwcb">
-        <h1 className="text-3xl text-indigo-600 font-bold">Profile Details</h1>
+    <div className="flex w-full flex-col items-center justify-center px-2 py-20 md:px-8">
+      <div className="flex-rwcb h-20 w-full">
+        <h1 className="text-3xl font-bold text-indigo-600">Profile Details</h1>
       </div>
       <form
-        className="flex flex-col gap-6 py-4 w-full"
+        className="flex w-full flex-col gap-6 py-4"
         onSubmit={updateProfile}
       >
         <div className="gap-x-4 gap-y-1 max-md:flex-col md:flex">
@@ -75,13 +75,13 @@ const profile = () => {
               <input
                 id="fileInput"
                 type="file"
-                accept=".gif, .png, .jpeg"
-                onChange={event => handleFileSelection(event)}
+                accept="jpg, .png, .jpeg"
+                onChange={(event) => handleFileSelection(event)}
                 className="hidden"
               />
               <div
                 title="Change Avatar"
-                className="flex-rcc text-black absolute right-[0.5px] top-[0.5px] size-[22px] -translate-y-1/2 translate-x-1/2 cursor-pointer rounded-full hover:text-indigo-600 bg-white"
+                className="flex-rcc absolute right-[0.5px] top-[0.5px] size-[22px] -translate-y-1/2 translate-x-1/2 cursor-pointer rounded-full bg-white text-black hover:text-indigo-600"
               >
                 <BiEdit sx={{ fontSize: 14 }} />
               </div>
@@ -98,7 +98,7 @@ const profile = () => {
                 className="size-full rounded-lg"
               />
             ) : (
-              <p className="bg-gray-50 border border-gray-300 text-gray-900 size-full rounded-lg items-center justify-center flex">
+              <p className="flex size-full items-center justify-center rounded-lg border border-gray-300 bg-gray-50 text-gray-900">
                 {formData.name && formData.name.slice(0, 1).toUpperCase()}
               </p>
             )}
@@ -110,15 +110,15 @@ const profile = () => {
           <input
             type="text"
             value={formData.name}
-            onChange={e => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Enter your name"
             required
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full md:w-[75%] p-2.5"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm md:w-[75%]"
           />
         </div>
         <div className="md:flex-rc max-md:flex-c gap-x-4 gap-y-1">
           <p className="w-full font-medium md:w-1/4">Email:</p>
-          <p className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full md:w-[75%] p-2.5">
+          <p className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm md:w-[75%]">
             {userInfo && userInfo.email}
           </p>
         </div>
@@ -130,11 +130,11 @@ const profile = () => {
           <input
             type="text"
             value={formData.company}
-            onChange={e =>
+            onChange={(e) =>
               setFormData({ ...formData, company: e.target.value })
             }
             placeholder="Enter your company name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full md:w-[75%] p-2.5"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm md:w-[75%]"
           />
         </div>
         <div className="md:flex-rc max-md:flex-c gap-x-4 gap-y-1">
@@ -142,18 +142,18 @@ const profile = () => {
           <input
             type="text"
             value={formData.address}
-            onChange={e =>
+            onChange={(e) =>
               setFormData({ ...formData, address: e.target.value })
             }
             placeholder="Enter your address"
             required
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full md:w-[75%] p-2.5"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm md:w-[75%]"
           />
         </div>
 
         <button
           type="submit"
-          className="w-fit self-end text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+          className="w-fit self-end rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300"
         >
           Save Changes
         </button>

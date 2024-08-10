@@ -19,7 +19,7 @@ export default function ApplyJob() {
     form.append("cv", file);
 
     try {
-      await postRequest("/applied-jobs", form, "multipart/form-data");
+      await postRequest("/applied-jobs/apply", form, "multipart/form-data");
 
       successToast("Your Application is Submitted , Redirecting ... ");
       setTimeout(() => {
@@ -40,23 +40,6 @@ export default function ApplyJob() {
         onSubmit={handleSubmit}
         className="mx-4 h-full w-full px-4 md:w-1/2"
       >
-        {!file && userInfo?.cv && (
-          <div className="mb-4 flex w-full flex-col items-start justify-center">
-            <p className="mb-1 text-base font-semibold">Saved CV :</p>
-            <div className="flex-rwcb w-full">
-              <p>
-                You can use the saved CV to continue with your application or
-                upload a new CV.
-              </p>
-              <Link
-                href={userInfo?.cv}
-                className="flex-rcc w-20 rounded border border-indigo-600 py-2 text-xs text-indigo-600 transition-all duration-700 hover:bg-indigo-600 hover:text-white"
-              >
-                Download CV
-              </Link>
-            </div>
-          </div>
-        )}
         <div className="mb-4 flex w-full flex-col items-start justify-center">
           <label className="mb-1 text-base font-semibold">Upload CV :</label>
           <input
@@ -73,9 +56,9 @@ export default function ApplyJob() {
           />
         </div>
 
-        {file && (
+        {(file || userInfo?.cv) && (
           <embed
-            src={URL.createObjectURL(file)}
+            src={file ? URL.createObjectURL(file) : userInfo?.cv}
             className="mb-6 h-[600px] w-full rounded"
           />
         )}

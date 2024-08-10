@@ -125,7 +125,7 @@ export const getUserInfo = async email => {
 };
 
 export const updateUserInfo = async (email, file, data) => {
-  const logo = file ? `http://localhost:4000/${file}` : null;
+  const logo = file;
   const user = await authDatabase.findOneAndUpdate(
     { email },
     { logo, ...data },

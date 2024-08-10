@@ -10,7 +10,7 @@ import authenticateToken from "../../middlewares/authenticateToken.js";
 const applyJobsRouter = express.Router();
 
 applyJobsRouter.post(
-  "/",
+  "/apply",
   authenticateToken,
   uploadCV.single("cv"),
   httpApplyForJob

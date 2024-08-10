@@ -1,20 +1,12 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = "uploads/cvs";
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-    cb(null, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "CVs",
+    allowedFormats: ["pdf"],
   },
 });
 

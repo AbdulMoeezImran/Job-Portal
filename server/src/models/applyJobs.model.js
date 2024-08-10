@@ -9,8 +9,7 @@ export const applyForJob = async (email, file, { job }) => {
 
   // If a new file is uploaded, update the CV link
   if (file) {
-    cv = `http://localhost:4000/${file}`;
-    user.cv = cv; // Update the user's CV in the database
+    user.cv = file; // Update the user's CV in the database
     await user.save(); // Save the updated user record
   }
 
@@ -26,7 +25,12 @@ export const applyForJob = async (email, file, { job }) => {
   }
 
   // Create the job application
-  return await applyJobsDatabase.create({ name: user.name, email, cv, job });
+  return await applyJobsDatabase.create({
+    name: user.name,
+    email,
+    cv: file ? file : user.cv,
+    job,
+  });
 };
 
 export const getAppliedJobs = async email =>
