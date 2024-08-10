@@ -61,12 +61,11 @@ const EditJob = ({ editJob, setEditJob }) => {
           <label className="mb-4 flex w-full flex-col items-start justify-center">
             <p className="mb-1 text-base font-semibold">Salary :</p>
             <input
-              type="number"
+              type="text"
               value={formData.salary}
               onChange={(e) =>
                 setFormData({ ...formData, salary: e.target.value })
               }
-              min="0"
               className="mb-2 w-full rounded border border-indigo-600 px-3 py-2"
               placeholder="Enter salary per month"
               required

@@ -12,7 +12,7 @@ import {
 export default function Postajob() {
   const [formData, setFormData] = useState({
     title: "",
-    salary: 0,
+    salary: "",
     description: "",
     education: "",
     industry: "",
@@ -57,16 +57,17 @@ export default function Postajob() {
         </label>
 
         <label className="mb-4 flex w-full flex-col items-start justify-center">
-          <p className="mb-1 text-base font-semibold">Salary :</p>
+          <p className="mb-1 text-base font-semibold">
+            Salary <span className="text-sm font-medium">(Monthly)</span> :
+          </p>
           <input
-            type="number"
+            type="text"
             value={formData.salary}
             onChange={(e) =>
               setFormData({ ...formData, salary: e.target.value })
             }
-            min="0"
             className="mb-2 w-full rounded border border-indigo-600 px-3 py-2"
-            placeholder="Enter salary per month"
+            placeholder="e.g. 50000"
             required
           />
         </label>
@@ -88,7 +89,6 @@ export default function Postajob() {
         <label className="mb-4 flex w-full flex-col items-start justify-center">
           <p className="mb-1 text-base font-semibold">Education :</p>
           <Select
-            value={formData.education}
             className="mb-2 w-full rounded border border-indigo-600"
             onChange={(e) => setFormData({ ...formData, education: e.value })}
             placeholder="Please Select Education"
@@ -100,7 +100,6 @@ export default function Postajob() {
         <label className="mb-4 flex w-full flex-col items-start justify-center">
           <p className="mb-1 text-base font-semibold">Industry :</p>
           <Select
-            value={formData.industry}
             className="mb-2 w-full rounded border border-indigo-600"
             onChange={(e) => setFormData({ ...formData, industry: e.value })}
             placeholder="Please Select Industry"
@@ -112,7 +111,6 @@ export default function Postajob() {
         <label className="mb-4 flex w-full flex-col items-start justify-center">
           <p className="mb-1 text-base font-semibold">Job Type :</p>
           <Select
-            value={formData.job_type}
             className="mb-2 w-full rounded border border-indigo-600"
             onChange={(e) => setFormData({ ...formData, job_type: e.value })}
             placeholder="Please Select Job type"
@@ -124,7 +122,6 @@ export default function Postajob() {
         <label className="mb-4 flex w-full flex-col items-start justify-center">
           <p className="mb-1 text-base font-semibold">Job Experience :</p>
           <Select
-            value={formData.job_experience}
             className="mb-2 w-full rounded border border-indigo-600"
             onChange={(e) =>
               setFormData({ ...formData, job_experience: e.value })

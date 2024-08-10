@@ -4,9 +4,6 @@ export const applyForJob = async (email, file, { job }) => {
   // Find the user by email
   const user = await authDatabase.findOne({ email });
 
-  // Check if the user already has a CV stored in the database
-  let cv = user.cv || null;
-
   // If a new file is uploaded, update the CV link
   if (file) {
     user.cv = file; // Update the user's CV in the database
@@ -14,7 +11,7 @@ export const applyForJob = async (email, file, { job }) => {
   }
 
   // If there is no CV (neither existing nor uploaded), throw an error
-  if (!cv) {
+  if (!file || !user.cv) {
     throw new Error("Please upload your CV");
   }
 

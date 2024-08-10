@@ -7,8 +7,8 @@ import { useRouter } from "next/router";
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
-  const userPending = useSelector(state => state.user.userPending);
-  const userInfo = useSelector(state => state.user.userInfo);
+  const userPending = useSelector((state) => state.user.userPending);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const router = useRouter();
   const location = router.pathname;
   const pathParts = location.split("/").filter(Boolean);
@@ -16,7 +16,6 @@ const AppLayout = ({ children }) => {
     pathParts[1] === "login" ||
     pathParts[1] === "register" ||
     pathParts[1] === "forget-password";
-  const isProfilePage = pathParts[0] === "profile";
   const isPostJobPage =
     pathParts[0] === "postajob" || pathParts[0] === "postedjobs";
   const isEmployerPage = pathParts[1] === "employer-setup";
@@ -26,25 +25,27 @@ const AppLayout = ({ children }) => {
 
   // routes protecting
   useEffect(() => {
-    // auth routes protecting
-    if (userInfo && isAuthPage) {
-      router.push("/");
-    }
+    if (!userPending) {
+      if (!userInfo && pathParts.length !== 0 && !isAuthPage) {
+        router.push("/auth/login");
+      }
 
-    // post job routes protecting
-    if (userInfo && !userInfo.company && isPostJobPage) {
-      router.push("/auth/employer-setup");
-    }
+      // auth routes protecting
+      if (userInfo && isAuthPage) {
+        router.push("/");
+      }
 
-    // employer route protecting
-    if (userInfo && userInfo.company && isEmployerPage) {
-      router.push("/postajob");
-    }
+      // post job routes protecting
+      if (userInfo && !userInfo.company && isPostJobPage) {
+        router.push("/auth/employer-setup");
+      }
 
-    // if (!userInfo && (isProfilePage || isPostJobPage || isEmployerPage)) {
-    //   router.push("/auth/login");
-    // }
-  }, [pathParts]);
+      // employer route protecting
+      if (userInfo && userInfo.company && isEmployerPage) {
+        router.push("/postajob");
+      }
+    }
+  }, [userPending, pathParts]);
 
   return (
     <>

@@ -2,14 +2,10 @@ import JobsCard from "@/Components/JobsCard";
 import Loader from "@/Components/Loader";
 import { getRequest } from "@/GlobalFunctions/ApiRequest";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import useSWR from "swr";
 
 export default function PostedJobs() {
-  const user = useSelector((state) => state?.User?.userData);
   const [myJobs, setMyJobs] = useState([]);
-
-  const id = user?._id;
 
   const getPostedJobs = async () => {
     try {

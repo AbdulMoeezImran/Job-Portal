@@ -21,10 +21,14 @@ const profile = () => {
     e.preventDefault();
 
     const form = new FormData();
-    form.append("logo", formData.logo);
     form.append("name", formData.name);
-    form.append("company", formData.company);
     form.append("address", formData.address);
+    if (formData.logo) {
+      form.append("logo", formData.logo);
+    }
+    if (formData.company) {
+      form.append("company", formData.company);
+    }
 
     form.forEach((key, value) => {
       console.log(value, key);

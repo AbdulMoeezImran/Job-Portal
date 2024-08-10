@@ -6,7 +6,7 @@ export const educationValues = [
 
 export const industryValues = [
   { value: "Business", label: "Business" },
-  { value: "Banking", label: "Bachlor" },
+  { value: "Banking", label: "Banking" },
   { value: "Education", label: "Education" },
   { value: "Telecommunication", label: "Telecommunication" },
   { value: "Others", label: "Others" },

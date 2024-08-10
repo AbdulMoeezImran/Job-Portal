@@ -133,5 +133,6 @@ export const updateUserInfo = async (email, file, data) => {
       new: true,
     }
   );
+  console.log(user);
   return user;
 };

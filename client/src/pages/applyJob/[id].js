@@ -56,9 +56,9 @@ export default function ApplyJob() {
           />
         </div>
 
-        {(file || userInfo?.cv) && (
+        {(file || userInfo.cv) && (
           <embed
-            src={file ? URL.createObjectURL(file) : userInfo?.cv}
+            src={file ? URL.createObjectURL(file) : userInfo.cv}
             className="mb-6 h-[600px] w-full rounded"
           />
         )}

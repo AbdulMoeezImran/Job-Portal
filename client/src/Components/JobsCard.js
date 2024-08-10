@@ -54,7 +54,7 @@ const JobsCard = ({ job, posted }) => {
               onClick={() =>
                 Router.push(
                   posted
-                    ? `/postedJobDetails/${job?._id}`
+                    ? `/postedJobDetails/${job._id}`
                     : `/jobDetails/${job._id}`,
                 )
               }
