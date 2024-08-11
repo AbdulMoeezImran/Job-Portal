@@ -11,7 +11,7 @@ export const applyForJob = async (email, file, { job }) => {
   }
 
   // If there is no CV (neither existing nor uploaded), throw an error
-  if (!file || !user.cv) {
+  if (!file && !user.cv) {
     throw new Error("Please upload your CV");
   }
 
